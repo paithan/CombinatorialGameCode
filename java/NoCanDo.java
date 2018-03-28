@@ -1,10 +1,10 @@
 /**
- * Represents a Col game on a Grid Graph. 
+ * Represents a NoCanDo position.  NoCanDo is a combinatorial game where players play dominoes on empty pairs of spaces on a checkerboard.  The Left player must play dominoes vertically, and the Right player must play them Horizontally.  After each move, all dominos must be adjacent (not diagonally) to at least one uncovered square.
+ *
+ * This file requires Pair.java, but that is an assignment for my data structures course, so I have included Pair.class instead.
  *
  * @author Kyle Burke <paithanq@gmail.com>
  */
-
-//package packageName
 
 import javax.swing.*;
 import java.util.*;
@@ -22,10 +22,10 @@ public class NoCanDo extends CombinatorialGame implements SwingDisplayable {
     //width of the grid
     private int width;
     
-    //
+    //coordinates of the top halves of the vertical pieces
     private Set<Pair<Integer, Integer>> verticalTops;
     
-    
+    //coordinates of the left halves of the horizontal pieces
     private Set<Pair<Integer, Integer>> horizontalLefts;
     
     //comparator for Pairs so we can use the TreeSet.
@@ -43,14 +43,24 @@ public class NoCanDo extends CombinatorialGame implements SwingDisplayable {
     /* constructors */
     
     /**
-     * Constructor
+     * Creates an empty NoCanDo position.
+     *
+     * @param height  The number of rows on the board.
+     * @param width  The number of columns on the board.
+     * @throws IllegalArgumentException  Never.
      */
     public NoCanDo(int height, int width) throws IllegalArgumentException {
         this(height, width, new TreeSet<Pair<Integer, Integer>>(PAIR_COMP), new TreeSet<Pair<Integer, Integer>>(PAIR_COMP));
     }
     
     /**
-     * Constructor
+     * Builds a generic NoCanDo board of any size with any dominoes.
+     *
+     * @param height  The number of rows on the board.
+     * @param width  The number of columns on the board.
+     * @param tops  The top coordinates of the vertical dominoes.
+     * @param lefts  The left coordinates of the horizontal dominoes.
+     * @throws IllegalArgumentException  When the sets of dominoes do not form a legal game state.
      */
     public NoCanDo(int height, int width, Set<Pair<Integer, Integer>> tops, Set<Pair<Integer,Integer>> lefts) throws IllegalArgumentException {
         this.height = height;
@@ -63,7 +73,11 @@ public class NoCanDo extends CombinatorialGame implements SwingDisplayable {
     }
     
     /**
-     * Constructor
+     * Creates an 8x8 NoCanDo board with any specified dominoes.
+     *
+     * @param tops  The top coordinates of the vertical dominoes.
+     * @param lefts  The left coordinates of the horizontal dominoes.
+     * @throws IllegalArgumentException  When the sets of dominoes do not form a legal game state.
      */
     public NoCanDo(Set<Pair<Integer, Integer>> tops, Set<Pair<Integer,Integer>> lefts) throws IllegalArgumentException {
         this(8, 8, tops, lefts);
@@ -71,7 +85,9 @@ public class NoCanDo extends CombinatorialGame implements SwingDisplayable {
     }
     
     /**
-     * Constructor
+     * Creates an empty 8x8 NoCanDoBoard.
+     *
+     * @throws IllegalArgumentException  Never.
      */
     public NoCanDo() throws IllegalArgumentException {
         this(8,8);
@@ -81,6 +97,9 @@ public class NoCanDo extends CombinatorialGame implements SwingDisplayable {
     
     /**
      * Returns whether this equals another game.
+     *
+     * @param other  Another NoCanDo position.  Returns false automatically on any game that is not NoCanDo.
+     * @return  Whether other equals this.
      */
     public boolean equals(CombinatorialGame other) {
         try {
@@ -92,6 +111,9 @@ public class NoCanDo extends CombinatorialGame implements SwingDisplayable {
     
     /**
      * Returns whether this equals another NoCanDo.
+     *
+     * @param other  Another NoCanDo position.
+     * @return  Whether other equals this, meaning they both have the same sets of vertical and horizontal domino positions.
      */
     public boolean equals(NoCanDo other) {
         return this.getHeight() == other.getHeight() &&
@@ -102,6 +124,8 @@ public class NoCanDo extends CombinatorialGame implements SwingDisplayable {
     
     /**
      * Returns the top coordinates of vertical dominoes.
+     *
+     * @return The coordinates of the tops of the vertical dominoes on this board.
      */
     public Set<Pair<Integer, Integer>> getVerticalTops() {
         return copySet(this.verticalTops);
@@ -109,6 +133,8 @@ public class NoCanDo extends CombinatorialGame implements SwingDisplayable {
     
     /**
      * Returns the left coordinates of horizontal dominoes.
+     *
+     * @return The coordinates of the lefts of the horizontal dominoes on this board.
      */
     public Set<Pair<Integer, Integer>> getHorizontalLefts() {
         return copySet(this.horizontalLefts);
@@ -116,6 +142,7 @@ public class NoCanDo extends CombinatorialGame implements SwingDisplayable {
     
     /**
      * Returns the height.
+     *
      * @return  The height of this.
      */
     public int getHeight() {
@@ -124,6 +151,7 @@ public class NoCanDo extends CombinatorialGame implements SwingDisplayable {
     
     /**
      * Returns the width.
+     *
      * @return  The width of the grid for this graph.
      */
     public int getWidth() {
@@ -287,6 +315,7 @@ public class NoCanDo extends CombinatorialGame implements SwingDisplayable {
         return true;
     }
     
+    //returns whether each domino has at least one liberty.
     private boolean allHaveLiberties() {
         //check all the horizontal dominoes
         for (Pair<Integer, Integer> left : this.horizontalLefts) {
@@ -391,6 +420,8 @@ public class NoCanDo extends CombinatorialGame implements SwingDisplayable {
 
         /**
          * Creates a new instance of GridColPanel.
+         *
+         * @param position  The NoCanDo position to display.
          */
         public NoCanDoPanel(NoCanDo position) {
             this.position = position;
@@ -461,7 +492,7 @@ public class NoCanDo extends CombinatorialGame implements SwingDisplayable {
         }
         
         /**
-         * Returns a position.
+         * Returns an empty position.
          *
          * @return  An empty 8x8 NoCanDo position.  (No dominoes.)
          */
@@ -476,7 +507,7 @@ public class NoCanDo extends CombinatorialGame implements SwingDisplayable {
     
     /** 
      * Unit test for NoCanDo
-     * @param args  Arguments used to test this class.
+     * @param args  Arguments used to test this class. (Unused)
      */
     public static void main(String[] args) {
     
