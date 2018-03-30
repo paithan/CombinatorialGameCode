@@ -1,13 +1,10 @@
+import javax.swing.*;
+
 /**
  * The Interface for objects that produce a Swing component.
  *
- * @author Kyle G. Burke <paithanq@gmail.com>
+ * @author Kyle Burke <paithanq@gmail.com>
  */
-
-//package packageName
-
-import javax.swing.*;
-
 public interface SwingDisplayable {
 
     /* constants */
