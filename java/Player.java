@@ -1,17 +1,13 @@
-/**
- * @file   Player.java
- * @author Kyle Burke <paithanq@gmail.com>
- * @date   
- * 
- * @brief	A Player of Combinatorial Games.  
- * 
- */
-//package something;
- 
 import java.lang.*;
 import java.io.*;
 import java.util.*;
 
+/**
+ * A player of combinatorial games.  Extend this to implement a player of a specific game.
+ *
+ * @author Kyle Burke <paithanq@gmail.com> 
+ * 
+ */
 public abstract class Player<G extends CombinatorialGame> {
 
     //instance variables
