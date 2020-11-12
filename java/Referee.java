@@ -193,6 +193,21 @@ public class Referee<Game extends CombinatorialGame> implements Callable<Integer
         return this.getPlayerRole(this.currentPlayer);
     }
     
+    /**
+     * Plays games until either there is one forfeit or the given number of games ends.
+     */
+    public void playToForfeit(int maxGames) {
+        for (int i = 0; i < maxGames; i++) {
+            System.out.println("Starting Game #" + i + "...");
+            this.call();
+            if (this.getTotalForfeits() > 0) {
+                System.out.println("Reached a forfeit!!");
+                break;
+            }
+        }
+    
+    }
+    
     //starts the game, with a specified initial player
     private int call(int startingPlayer) {
         this.currentPlayer = startingPlayer;
@@ -261,6 +276,11 @@ public class Referee<Game extends CombinatorialGame> implements Callable<Integer
         }
     }
     
+    //returnts the total number of forfeits
+    private int getTotalForfeits() {
+        return this.forfeitsByPlayer.get(0) + this.forfeitsByPlayer.get(1);
+    }
+    
     //performs a forfeit for a player
     protected void currentPlayerForfeit() {
         int previousForfeits = this.forfeitsByPlayer.get(this.currentPlayer);
@@ -273,7 +293,7 @@ public class Referee<Game extends CombinatorialGame> implements Callable<Integer
     }
     
     // repeatedly asks for moves until someone loses.
-    // (This is the main loop for this code
+    // (This is the main loop for this code)
     protected int requestMoves() {
         while (this.position.playerHasAnOption(this.currentPlayer)) {
             try {
@@ -348,7 +368,7 @@ public class Referee<Game extends CombinatorialGame> implements Callable<Integer
         }
         this.setPrint(true);
         this.display.println("Competition complete!  Games won:");
-        double[] percentagesWon = new double[] {((double) gamesWon[0]) / numGames, ((double) gamesWon[1]) / numGames, (double) this.forfeitsByPlayer.get(0) + this.forfeitsByPlayer.get(1)};
+        double[] percentagesWon = new double[] {((double) gamesWon[0]) / numGames, ((double) gamesWon[1]) / numGames, (double) this.getTotalForfeits()};
         NumberFormat percentFormat = NumberFormat.getPercentInstance();
         for (int i = 0; i < 2; i ++) {
             this.display.println("    " + this.getPlayerName(i) + " (" + this.getPlayerRole(i) + ") : " + gamesWon[i] + " (" + percentFormat.format(((double) gamesWon[i]) / numGames) + ")  forfeits: " + this.forfeitsByPlayer.get(i));
