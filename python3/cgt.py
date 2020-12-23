@@ -71,6 +71,8 @@ class Nim(ImpartialGame):
     def __hash__(self):
         return super().__hash__()
   
+ 
+
     
 
 class GrundySmasher(object):
@@ -207,10 +209,7 @@ def sample_test():
     
     #TODO: include a nimberizer that fails
     
-    
-    
 #run the tests if we're just executing this file directly and not importing it.
 if __name__ == "__main__":
     sample_test()
-    
-    
+   
