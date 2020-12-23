@@ -191,7 +191,29 @@ class NimberizerVerifier(object):
         #print out all the incorrect values before returning.  I probably shouldn't always do this, but I do right now.
         self.print_all_incorrect()
         return all_correct
-            
+ 
+
+def print_impartial_position_and_options(position, smasher = GrundySmasher()):
+    print("Base Position:")
+    print(position)
+    nimber = smasher.evaluate(position)
+    print("... has nimber:", nimber)
+    
+    print("Options: ")
+    nimbers = []
+    for option in position.get_options():
+        print()
+        print("Option:")
+        print(option)
+        nimber = smasher.evaluate(option)
+        print("... has nimber:", nimber)
+        nimbers.append(nimber)
+    print()
+    print("All nimbers:", nimbers)
+ 
+ 
+ 
+ 
     
 def sample_test():
     '''Some code to run a sample test to show how to use this package.'''

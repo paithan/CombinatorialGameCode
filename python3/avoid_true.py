@@ -1,3 +1,5 @@
+### Authors: Kyle Burke and Matt Ferland
+
 import cgt
 import copy
 
@@ -6,7 +8,7 @@ class AvoidTrue(cgt.ImpartialGame):
     """Models an AvoidTrue state.
     attributes: false variables (a list of indices), true variables (a list of indices), and clauses (a list of lists of indices)."""
     
-    def __init__(self, clauses, falses=[], trues = []):
+    def __init__(self, clauses, falses=[], trues=[]):
         #print("clauses:", clauses)
         #print("falses:", falses)
         #print("trues:", trues)
@@ -178,7 +180,7 @@ print(standard_b)
 print()
 print("Should be True:", standard_a == standard_b)
 
-input()
+
 
 
 smasher = cgt.GrundySmasher()
@@ -198,6 +200,32 @@ for option in options:
 
 
 print("Starting game has nimber: " + str(smasher.evaluate(avoid_true_a)))
+
+
+
+
+
+
+
+game_c = AvoidTrue([[0, 1], [0, 2, 3]], [0, 1, 2, 3, 4])
+
+print("game_c:")
+print(game_c)
+print("... has nimber:",smasher.evaluate(game_c))
+
+game_d = AvoidTrue([[0, 3, 5], [1, 1, 2], [1, 3, 4]], [], [5])
+print("game_d:")
+print(game_d)
+print("... has nimber:", smasher.evaluate(game_d))
+
+game_e = AvoidTrue([[0, 3, 5], [1, 1, 2], [1, 3, 4]])
+#print("game_e:")
+#print(game_e)
+#print("... has nimber:", smasher.evaluate(game_e))
+
+cgt.print_impartial_position_and_options(game_e)
+
+input("Press Enter to run the big tests...")
 
 #clauses = [[1, 2], [3, 4], [1, 3]]
 
@@ -269,8 +297,10 @@ for position in list(smasher.memo):
     nimber = smasher.evaluate(position)
     if not nimber in seen_nimbers:
         seen_nimbers.append(nimber)
-        print(position)
-        print("... has nimber: " + str(nimber))
+        print("New nimber!!!!!!")
+        cgt.print_impartial_position_and_options(position)
+        #print(position)
+        #print("... has nimber: " + str(nimber))
         print()
 
 
