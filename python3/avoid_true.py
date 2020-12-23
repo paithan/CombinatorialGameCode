@@ -98,9 +98,9 @@ print("Generating games with variable indices " + str(vars) + "...")
 
 for index1 in [1]:
     for index2 in [2]:
-        for index3 in vars:
-            for index4 in vars:
-                for index5 in vars:
+        for index3 in vars[:3]:
+            for index4 in vars[:4]:
+                for index5 in vars[:5]:
                     for index6 in vars:
                         for index7 in vars:
                             for index8 in vars:
