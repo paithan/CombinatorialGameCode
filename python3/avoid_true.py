@@ -228,6 +228,7 @@ class AvoidTrue(cgt.ImpartialGame):
             
             
  
+ 
     
 print("creating avoid_true_a...")
 avoid_true_a = AvoidTrue([[1, 2, 3], [2, 3, 7], [1]], [], [])
@@ -268,29 +269,35 @@ print("... has nimberB:", nimberB)
 
 game_c = AvoidTrue([[0, 1], [0, 2, 3]], [0, 1, 2, 3, 4], [])
 
-print("game_c:")
-print(game_c)
-print("... has nimber:",smasher.evaluate(game_c))
+#print("game_c:")
+#print(game_c)
+#print("... has nimber:",smasher.evaluate(game_c))
 
 game_d = AvoidTrue([[0, 3, 5], [1, 1, 2], [1, 3, 4]], [], [5])
-print("*********************")
-print()
-print("game_d:")
-print(game_d)
-print(game_d.standardize())
-#print("... has nimber:", smasher.evaluate(game_d))
-cgt.print_impartial_position_and_options(game_d)
 
-print()
-print("******************")
-print()
+assert smasher.evaluate(game_d) == 3
+
+
+#print("*********************")
+#print()
+#print("game_d:")
+#print(game_d)
+#print(game_d.standardize())
+#print("... has nimber:", smasher.evaluate(game_d))
+#cgt.print_impartial_position_and_options(game_d)
+
+
+#print()
+#print("******************")
+#print()
 
 game_e = AvoidTrue([[0, 3, 5], [1, 1, 2], [1, 3, 4]], [], [])
-print("game_e:")
-print(game_e)
-print("... has nimber:", smasher.evaluate(game_e))
+assert smasher.evaluate(game_e) == 4
+#print("game_e:")
+#print(game_e)
+#print("... has nimber:", smasher.evaluate(game_e))
 
-cgt.print_impartial_position_and_options(game_e)
+#cgt.print_impartial_position_and_options(game_e)
 
 input("Press Enter to run the big tests...")
 
