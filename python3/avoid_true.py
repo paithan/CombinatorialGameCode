@@ -1,5 +1,5 @@
 ### Authors: Kyle Burke and Matt Ferland
-
+import sys
 import cgt
 import copy
 
@@ -50,7 +50,7 @@ class AvoidTrue(cgt.ImpartialGame):
     def check_still_false(self):
         '''Returns true iff the formula still evaluates to false.'''
         for clause in self.clauses:
-            all_false = True
+            all_false = True #are all the variables in this one clause still False?
             for index in clause:
                 if index in self.true_variables:
                     all_false = False
@@ -89,7 +89,7 @@ class AvoidTrue(cgt.ImpartialGame):
         #print("standard:")
         #print(standard)
         
-        #remove repeated elements from clauses
+        #remove repeated variables from clauses
         for clause in standard.clauses:
             i = 0
             for element in clause:
@@ -203,13 +203,14 @@ class AvoidTrue(cgt.ImpartialGame):
             new_falses.append(changes[var])
         new_falses.sort()
         
-        for var in standard.true_variables:
-            #print("changes: " + str(changes))
-            if var not in changes:
-                changes[var] = next_index
-                next_index +=1
-            new_trues.append(changes[var])
-        new_trues.sort()
+        #don't need new trues
+        #for var in standard.true_variables:
+        #    #print("changes: " + str(changes))
+        #    if var not in changes:
+        #        changes[var] = next_index
+        #        next_index +=1
+        #    new_trues.append(changes[var])
+        #new_trues.sort()
             
         #print()
         #print("In simplification... after final change:")
@@ -226,9 +227,85 @@ class AvoidTrue(cgt.ImpartialGame):
         
         return standard
             
+
+def check_nimber(position, guess_nimber, smasher):
+    '''Checks that a position has a given nimber.  Raises an AssertionError if the guessed nimber is incorrect.'''
+    nimber = smasher.evaluate(position)
+    if (nimber == guess_nimber):
+        pass
+    else:
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        print("~~~~~~~~~~ Made an incorrect guess ~~~~~~~~~~")
+        print("nimber guessed:", guess_nimber)
+        cgt.print_impartial_position_and_options(position)
+        print("nimber:", nimber)
+        print("Standardized:")
+        print(position.standardize())
+        print("nimber guessed:", guess_nimber)
+        print("actual nimber: ", nimber)
+    assert guess_nimber == nimber
+    
+def get_smallest_with_nimber(smasher, nimber):
+    '''Returns the "smallest" AvoidTrue position with the requested nimber.'''
+    has_nimber = []
+    for position in smasher.memo:
+        if smasher.evaluate(position) == nimber:
+            has_nimber.append(position)
+    print("Has", len(has_nimber), "position(s) with nimber", nimber)
+    has_nimber.sort(key=lambda pos: len(pos.clauses) * len(pos.false_variables) + len(pos.clauses[0]))
+    if (len(has_nimber) > 0):
+        return has_nimber[0]
+    else:
+        return None
+
+
+smasher = cgt.GrundySmasher()
             
  
- 
+game_0 = AvoidTrue([[0]], [0], [])
+check_nimber(game_0, 0, smasher)
+
+game_1 = AvoidTrue([[0]], [0, 1], [])
+check_nimber(game_1, 1, smasher)
+
+game_2 = AvoidTrue([[0], [1, 2]], [0, 1, 2], [])
+check_nimber(game_2, 2, smasher)
+
+
+
+print(smasher)
+
+game_3 = AvoidTrue([[0], [1, 2]], [0, 1, 2, 3], [])
+check_nimber(game_3, 3, smasher)
+
+game_4 = AvoidTrue([[0, 1], [2, 3, 4], [0, 3, 5]], [0, 1, 2, 3, 4, 5], [])
+check_nimber(game_4, 4, smasher)
+
+#game_4 = AvoidTrue([[0], [1,2], [0, 1, 4]], [0, 1, 2, 3, 4], [])
+#game_4 = AvoidTrue([[0], [1,2], [0, 1, 3]], [0, 1, 2, 3, 4], [])
+#check_nimber(game_4, 4, smasher)  #doesn't work!
+
+game_5 = AvoidTrue([[0, 1], [2, 3, 4], [0, 3, 5]], [0, 1, 2, 3, 4, 5, 6], [])
+check_nimber(game_5, 5, smasher)
+
+game_6 = AvoidTrue([[0, 1, 2], [0, 3, 4], [0, 1, 5, 6], [2, 5, 7, 8]], [0, 1, 2, 3, 4, 5, 6, 7, 8], [])
+check_nimber(game_6, 6, smasher)
+
+game_7 = AvoidTrue([[0, 1, 2], [0, 3, 4], [0, 1, 5, 6], [2, 5, 7, 8]], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [])
+check_nimber(game_7, 7, smasher)
+
+
+
+smalls = []
+for nimber in range(8):
+    smallest = get_smallest_with_nimber(smasher, nimber)
+    smalls.append(smallest)
+    print("smallest for *" + str(nimber) + ":")
+    print(smallest)
+
+
+
+
     
 print("creating avoid_true_a...")
 avoid_true_a = AvoidTrue([[1, 2, 3], [2, 3, 7], [1]], [], [])
@@ -248,8 +325,6 @@ print("Should be True:", standard_a == standard_b)
 
 
 
-
-smasher = cgt.GrundySmasher()
 
 
 nimber = smasher.evaluate(avoid_true_a)
@@ -298,6 +373,16 @@ assert smasher.evaluate(game_e) == 4
 #print("... has nimber:", smasher.evaluate(game_e))
 
 #cgt.print_impartial_position_and_options(game_e)
+
+print()
+print("game_f:")
+game_f = AvoidTrue([[0, 1], [2, 3, 4], [0, 3, 5]], [0, 1, 2, 3, 4, 5, 6], [])
+#cgt.print_impartial_position_and_options(game_f)
+
+print()
+print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ game_g ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`")
+game_g = AvoidTrue([[0, 1], [2, 3, 4], [0, 3, 5], [7, 8], [8]], [], [])
+#cgt.print_impartial_position_and_options(game_g)
 
 input("Press Enter to run the big tests...")
 
