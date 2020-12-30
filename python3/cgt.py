@@ -207,6 +207,8 @@ def print_impartial_position_and_options(position, smasher = GrundySmasher()):
         print(option)
         nimber = smasher.evaluate(option)
         print("... has nimber:", nimber)
+        print("Simplified option:")
+        print(option.standardize())
         nimbers.append(nimber)
     print()
     print("All nimbers:", nimbers)

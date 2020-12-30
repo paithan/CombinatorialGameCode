@@ -185,21 +185,15 @@ print("Should be True:", standard_a == standard_b)
 
 smasher = cgt.GrundySmasher()
 
-print("Starting game:")
+
+nimber = smasher.evaluate(avoid_true_a)
+nimberB = smasher.evaluate(avoid_true_b)
+
 print(avoid_true_a)
+print("... has nimber:", nimber)
 
-options = avoid_true_a.get_options()
-
-print("Options:")
-
-for option in options:
-    print("Move option:")
-    print(option)
-    print("... has nimber: " + str(smasher.evaluate(option)))
-    print()
-
-
-print("Starting game has nimber: " + str(smasher.evaluate(avoid_true_a)))
+print(avoid_true_b)
+print("... has nimberB:", nimberB)
 
 
 
@@ -216,12 +210,12 @@ print("... has nimber:",smasher.evaluate(game_c))
 game_d = AvoidTrue([[0, 3, 5], [1, 1, 2], [1, 3, 4]], [], [5])
 print("game_d:")
 print(game_d)
-print("... has nimber:", smasher.evaluate(game_d))
+#print("... has nimber:", smasher.evaluate(game_d))
 
 game_e = AvoidTrue([[0, 3, 5], [1, 1, 2], [1, 3, 4]])
-#print("game_e:")
-#print(game_e)
-#print("... has nimber:", smasher.evaluate(game_e))
+print("game_e:")
+print(game_e)
+print("... has nimber:", smasher.evaluate(game_e))
 
 cgt.print_impartial_position_and_options(game_e)
 
@@ -229,7 +223,7 @@ input("Press Enter to run the big tests...")
 
 #clauses = [[1, 2], [3, 4], [1, 3]]
 
-vars = [1, 2, 3, 4, 5, 6]
+vars = [0, 1, 2, 3, 4, 5]
 
 print("Generating games with variable indices " + str(vars) + "...")
 
@@ -263,7 +257,7 @@ print("Done with 2-CNF")
 print()
 print("*********************************************************************************")
 print()
-print("Now let's try 3-CNF...")
+input("Press enter to try 3-CNF...")
 
 
 for index1 in [1]:
@@ -289,10 +283,9 @@ for index1 in [1]:
                 #print("... has nimber: " + str(smasher.evaluate(position)))
 
 n = 3
-
+seen_nimbers = list(range(n+1))
 print("Let's look for nimbers above", n, "...")
 
-seen_nimbers = list(range(n))
 for position in list(smasher.memo):
     nimber = smasher.evaluate(position)
     if not nimber in seen_nimbers:
