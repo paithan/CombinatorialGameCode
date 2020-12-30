@@ -8,7 +8,7 @@ class AvoidTrue(cgt.ImpartialGame):
     """Models an AvoidTrue state.
     attributes: false variables (a list of indices), true variables (a list of indices), and clauses (a list of lists of indices)."""
     
-    def __init__(self, clauses, falses=[], trues=[]):
+    def __init__(self, clauses, falses, trues):
         #print("clauses:", clauses)
         #print("falses:", falses)
         #print("trues:", trues)
@@ -165,9 +165,9 @@ class AvoidTrue(cgt.ImpartialGame):
  
     
 print("creating avoid_true_a...")
-avoid_true_a = AvoidTrue([[1, 2, 3], [2, 3, 7], [1]])
+avoid_true_a = AvoidTrue([[1, 2, 3], [2, 3, 7], [1]], [], [])
 print("creating avoid_true_b...")
-avoid_true_b = AvoidTrue([[1, 4, 2], [5, 2, 4], [1]])
+avoid_true_b = AvoidTrue([[1, 4, 2], [5, 2, 4], [1]], [], [])
 
 
 print("avoid_true_a.standardize():")
@@ -201,18 +201,25 @@ print("... has nimberB:", nimberB)
 
 
 
-game_c = AvoidTrue([[0, 1], [0, 2, 3]], [0, 1, 2, 3, 4])
+game_c = AvoidTrue([[0, 1], [0, 2, 3]], [0, 1, 2, 3, 4], [])
 
 print("game_c:")
 print(game_c)
 print("... has nimber:",smasher.evaluate(game_c))
 
 game_d = AvoidTrue([[0, 3, 5], [1, 1, 2], [1, 3, 4]], [], [5])
+print("*********************")
+print()
 print("game_d:")
 print(game_d)
 #print("... has nimber:", smasher.evaluate(game_d))
+cgt.print_impartial_position_and_options(game_d)
 
-game_e = AvoidTrue([[0, 3, 5], [1, 1, 2], [1, 3, 4]])
+print()
+print("******************")
+print()
+
+game_e = AvoidTrue([[0, 3, 5], [1, 1, 2], [1, 3, 4]], [], [])
 print("game_e:")
 print(game_e)
 print("... has nimber:", smasher.evaluate(game_e))
@@ -223,30 +230,31 @@ input("Press Enter to run the big tests...")
 
 #clauses = [[1, 2], [3, 4], [1, 3]]
 
-vars = [0, 1, 2, 3, 4, 5]
+vars = [1, 2, 3, 4, 5, 6, 7, 8]
 
 print("Generating games with variable indices " + str(vars) + "...")
 
 print("Trying out 2-CNF positions...")
 
-for index1 in [1]:
-    for index2 in [2]:
-        for index3 in vars[:3]:
-            for index4 in vars[:4]:
-                for index5 in vars[:5]:
-                    for index6 in vars:
-                        for index7 in vars:
-                            for index8 in vars:
-                                #for index9 in vars:
-                                    #for index10 in vars:
-                                new_clauses = [[index1, index2], [index3, index4], [index5, index6], [index7, index8]] #, [index9, index10]]
-                                position = AvoidTrue(new_clauses)
-                                smasher.evaluate(position)
-                    #print("depth: 5")
-                print("depth: 4")
-            print("depth: 3")
-        print("depth: 2")
-    print("depth: 1")
+if False:
+    for index1 in [1]:
+        for index2 in [2]:
+            for index3 in vars[:3]:
+                for index4 in vars[:4]:
+                    for index5 in vars[:5]:
+                        for index6 in vars:
+                            for index7 in vars:
+                                for index8 in vars:
+                                    #for index9 in vars:
+                                        #for index10 in vars:
+                                    new_clauses = [[index1, index2], [index3, index4], [index5, index6], [index7, index8]] #, [index9, index10]]
+                                    position = AvoidTrue(new_clauses, [], [])
+                                    smasher.evaluate(position)
+                        #print("depth: 5")
+                    print("depth: 4")
+                print("depth: 3")
+            print("depth: 2")
+        print("depth: 1")
                 
                 #print(position)
                 #print("... has nimber: " + str(smasher.evaluate(position)))
@@ -271,7 +279,7 @@ for index1 in [1]:
                                 for index9 in vars:
                                     #for index10 in vars:
                                     new_clauses = [[index1, index2, index3], [index4, index5, index6], [index7, index8, index9]] #, [index9, index10]]
-                                    position = AvoidTrue(new_clauses)
+                                    position = AvoidTrue(new_clauses, [], [])
                                     smasher.evaluate(position)
                     #print("depth: 5")
                 print("depth: 4")
