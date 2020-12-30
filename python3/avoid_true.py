@@ -89,6 +89,17 @@ class AvoidTrue(cgt.ImpartialGame):
         #print("standard:")
         #print(standard)
         
+        #remove repeated elements from clauses
+        for clause in standard.clauses:
+            i = 0
+            for element in clause:
+                if element in clause[ : i]:
+                    #the element has already appeared, so delete this piece
+                    del clause[i]
+                else:
+                    i += 1
+                
+        
         #change all the variable indices to be 0, 1, ..., to k
         all_vars = standard.true_variables + standard.false_variables
         mex_val = cgt.mex(all_vars)
@@ -137,12 +148,25 @@ class AvoidTrue(cgt.ImpartialGame):
         #input()
         
         #drop extra variables from already-true clauses
-        for i in range(len(standard.clauses)):
+        #Shouldn't need to do this anymore because we just drop the clause in the next loop!!!!
+        #for i in range(len(standard.clauses)):
+        #    clause = standard.clauses[i]
+        #    for var in clause:
+        #        if var in standard.true_variables:
+        #            standard.clauses[i] = [var]
+        #            break
+                
+        #drop clauses that are already true
+        i = 0
+        while i < len(standard.clauses):
+        #for i in range(len(standard.clauses)):
             clause = standard.clauses[i]
             for var in clause:
                 if var in standard.true_variables:
-                    standard.clauses[i] = [var]
+                    del standard.clauses[i]
+                    i -= 1
                     break
+            i += 1
         
         
         #print("dropped extra variables from already-true clauses")
@@ -150,9 +174,50 @@ class AvoidTrue(cgt.ImpartialGame):
         #print()
         #input()
         
-        #sort clauses from smallest-to-biggest, with ties broken by the 
+        #sort clauses from shortest-to-longest, with ties broken by the first index in the clause
         standard.clauses.sort(key=lambda clause: len(clause) * maximum + clause[0])
         
+        
+        #renumber the variables based on the order they appear in clauses
+        #alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        next_index = 0
+        changes = {}
+        new_clauses = []
+        for clause in standard.clauses:
+            new_clause = []
+            for element in clause:
+                if element not in changes:
+                    changes[element] = next_index
+                    next_index += 1
+                new_clause.append(changes[element])
+            new_clause.sort()
+            new_clauses.append(new_clause)
+        
+        new_trues = []
+        new_falses = []
+            
+        for var in standard.false_variables:
+            if var not in changes:
+                changes[var] = next_index
+                next_index +=1 
+            new_falses.append(changes[var])
+        new_falses.sort()
+        
+        for var in standard.true_variables:
+            #print("changes: " + str(changes))
+            if var not in changes:
+                changes[var] = next_index
+                next_index +=1
+            new_trues.append(changes[var])
+        new_trues.sort()
+            
+        #print()
+        #print("In simplification... after final change:")
+        #print("standard: " + str(standard))
+            
+        standard = AvoidTrue(new_clauses, new_falses, new_trues)
+        
+        #print("changed to: " + str(standard))
         
         #print("After final sort")
         #print(standard)
@@ -212,6 +277,7 @@ print("*********************")
 print()
 print("game_d:")
 print(game_d)
+print(game_d.standardize())
 #print("... has nimber:", smasher.evaluate(game_d))
 cgt.print_impartial_position_and_options(game_d)
 
