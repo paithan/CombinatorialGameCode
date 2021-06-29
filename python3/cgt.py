@@ -107,6 +107,11 @@ class GrundySmasher(object):
     def has_evaluated(self, position):
         return position.standardize() in self.memo
     
+    def print_zeroes(self):
+        for position in self.memo:
+            if self.memo[position] == 0:
+                print(position)
+    
    
     
 class Nimberizer(ABC):
