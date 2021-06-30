@@ -89,17 +89,29 @@ class GrundySmasher(object):
         '''Returns the Grundy value of position, an instance of an ImpartialGame.'''
         position = position.standardize() #first reduce to a standard version
         if position in self.memo:
-            return self.memo[position]
-        else:
-            options = position.get_options()
-            option_values = []
-            for option in options:
-                option_values.append(self.evaluate(option))
-            value = mex(option_values)
-            self.memo[position] = value
-            if self.verbose:
-                print("Discovered that " + str(position) + " = *" + str(value))
-            return value
+            try:
+                return self.memo[position]
+                #return self.memo.get(position)
+            except KeyError:
+                print("Got a KeyError!")
+                print("key:", position, " hash:", position.__hash__(), "string: '" + str(position) + "'", "standardized:", position.standardize(), "std hash:", position.standardize().__hash__(), "std string: '" + str(position) + "'", "standardized string hash:", str(position.standardize()).__hash__())
+                print("equal keys:")
+                for key in self.memo:
+                    if (key == position):
+                        print("    ", key, "hash:", key.__hash__(), "string: '" + str(key) + "'", "standardized:", key.standardize(), "std hash:", key.standardize().__hash__(), "std string: '" + str(key) + "'", "standardized string hash:", str(key.standardize()).__hash__())
+                        
+                print()
+                print("key in keys:", position in self.memo)
+        #else:
+        options = position.get_options()
+        option_values = []
+        for option in options:
+            option_values.append(self.evaluate(option))
+        value = mex(option_values)
+        self.memo[position] = value
+        if self.verbose:
+            print("Discovered that " + str(position) + " = *" + str(value))
+        return value
         
     def set_verbose(self, verbosity):
         self.verbose = verbosity

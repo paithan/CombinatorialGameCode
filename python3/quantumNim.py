@@ -3,6 +3,8 @@ author: Kyle Burke'''
 
 import cgt
 import copy
+import time
+import math
 
 def toQNimString(nim):
     s = "("
@@ -96,16 +98,33 @@ class QuantumNim(cgt.ImpartialGame):
     
     def __eq__(self, other):
         """Returns whether self equals other."""
-        return str(self) == str(other)
+        a = self.standardize()
+        b = other.standardize()
+        return str(a) == str(b)
     
     def __hash__(self):
         return super().__hash__()
     
     def standardize(self):
-        '''Returns a new version of this with the nims ordered.'''
+        '''Returns a new version of this with the nims ordered (and maybe all flipped).'''
+        #print("In standardize...")
         copyNims = copy.deepcopy(self.nims)
         copyNims.sort(key = str)
-        return QuantumNim(copyNims)
+        clone = QuantumNim(copyNims)
+        #print("copyNims (sorted):    ", clone)
+        #check the reverses
+        flippedNims = []
+        for nim in self.nims:
+            flippedNims.append(cgt.Nim([nim.piles[1], nim.piles[0]]))
+        flippedNims.sort(key = str)
+        flipped = QuantumNim(flippedNims)
+        #print("flippedNims (sorted): ", flipped)
+        if str(clone) < str(flipped):
+            #print("returning copyNims")
+            return clone
+        else:
+            #print("returning flippedNims")
+            return flipped
         
         
         
@@ -128,17 +147,51 @@ class QuantumNim(cgt.ImpartialGame):
         return bothNim
         
       
-      
-nimA = cgt.Nim([3, 4])
-nimB = cgt.Nim([4,3])
-qNim = QuantumNim([nimA, nimB])
+
+
+smasher = cgt.GrundySmasher()
+
+if False:      
+    nimA = cgt.Nim([4, 5])
+    nimB = cgt.Nim([5, 4])
+    nims = [nimA, nimB]
+    qNim = QuantumNim(nims)
+    x = smasher.evaluate(qNim)
+    print(qNim, "evaluates to *" + str(x))
+        
+if False:
+    nimA = cgt.Nim([7, 8])
+    nimB = cgt.Nim([8, 7])
+    nims = [nimA, nimB]
+    qNim = QuantumNim(nims)
+    x = smasher.evaluate(qNim)
+    print(qNim, "evaluates to *" + str(x))
+        
+if True:
+    nimA = cgt.Nim([4, 5])
+    #nimB = cgt.Nim([8, 7])
+    nims = [nimA]
+    qNim = QuantumNim(nims)
+    x = smasher.evaluate(qNim)
+    print(qNim, "evaluates to *" + str(x))
+
+
+
+biggest = 6
+start = time.time()
+prev_t = start
+for i in range(0, biggest + 1):
+    nims = [cgt.Nim([i,i])]
+    qNim = QuantumNim(nims)
+    x = smasher.evaluate(qNim)
+    print(qNim, "has value *" + str(x), end = "")
+    next_t = time.time()
+    print("   (That took less than", math.ceil(next_t - prev_t), "seconds.)")
+    prev_t = next_t
 
 #qNim = QuantumNim([cgt.Nim([1,0])])
 
-smasher = cgt.GrundySmasher()
-smasher.evaluate(qNim)
-
-cgt.print_impartial_position_and_options(qNim, smasher)
+#cgt.print_impartial_position_and_options(qNim, smasher)
 
 print("******  Printing the zeroes! ******")
 
